@@ -4,7 +4,7 @@ import { Logging } from './decorators/logging.decorator';
 @Injectable()
 export class AppService {
   @Logging(new Logger())
-  getHelloService(): string {
-    return 'Hello World!';
+  getHelloService(word: string): string {
+    return `Hello ${word}`;
   }
 }

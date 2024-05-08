@@ -2,10 +2,11 @@ import { Logger } from '@nestjs/common';
 
 export function Logging(logger: Logger): MethodDecorator {
   return function (
-    target: any,
+    target: object,
     propertyName: string,
     descriptor: PropertyDescriptor,
   ) {
+    const className = target.constructor.name;
     const originalMethod = descriptor.value;
 
     descriptor.value = function (...args: any[]) {
@@ -15,19 +16,20 @@ export function Logging(logger: Logger): MethodDecorator {
 
       // before the original method
       logger.log(
-        `start ${propertyName} with arguments: ${JSON.stringify(args)}`,
+        `start ${className}.${propertyName} with arguments: ${JSON.stringify(
+          args,
+        )}`,
       );
-      console.log(target);
       // call the original method
       const result = originalMethod.apply(this, args);
 
       // after the original method
       if (result instanceof Promise) {
         return result.finally(() => {
-          logger.log(`end ${propertyName}`);
+          logger.log(`end ${className}.${propertyName}`);
         });
       }
-      logger.log(`end ${propertyName}`);
+      logger.log(`end ${className}.${propertyName}`);
       return result;
     };
 

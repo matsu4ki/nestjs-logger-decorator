@@ -12,6 +12,6 @@ export class AppController {
   @Logging(new Logger())
   getHelloController(): string {
     this.logger.log('Hello from the controller');
-    return this.appService.getHelloService();
+    return this.appService.getHelloService('world');
   }
 }
